@@ -14,4 +14,14 @@ class Item_logs extends Model
         'old_values',
         'new_values'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
+    public function item()
+    {
+        return $this->hasOne(Item::class);
+    }
 }

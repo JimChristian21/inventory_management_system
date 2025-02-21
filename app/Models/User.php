@@ -46,24 +46,18 @@ class User extends Authenticatable
         ];
     }
 
-    protected function user_roles() 
-    {
-        return $this->hasMany(User_role::class);
-    }
-
     public function roles()
     {
-        $ret = collect();
+        return $this->hasManyThrough(
+            Role::class, 
+            User_role::class,
+            'user_id',
+            'role_code'
+        );
+    }
 
-        foreach($this->user_roles as $role)
-        {
-            $data = [
-                'code' => $role->role->code,
-                'name' => $role->role->name
-            ];
-            $ret->push($data);
-        }
-
-        return $ret;
+    public function item_logs()
+    {
+        return $this->belongsTo(Item_logs::class);
     }
 }

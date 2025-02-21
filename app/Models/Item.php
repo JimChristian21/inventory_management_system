@@ -12,4 +12,9 @@ class Item extends Model
         'quantity',
         'critical_quantity'
     ];
+
+    public function item_logs()
+    {
+        return $this->belongsTo(Item_logs::class);
+    }
 }
