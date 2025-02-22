@@ -1,5 +1,6 @@
 <script setup>
     import { Link } from '@inertiajs/vue3';
+    import { ref } from 'vue';
 
     const props = defineProps({
         from: Number,
@@ -7,20 +8,58 @@
         total: Number,
         links: Array
     });
+
+    const itemsPerPage = ref(10);
+
+    const getLinkName = (name) => {
+
+        let ret = name;
+
+        if (name.includes('Previous')) {
+
+            ret = 'Prev';
+        } 
+        else if (name.includes('Next')) {
+
+            ret = 'Next';
+        }
+
+        return ret;
+    }
 </script>
 
 <template>
     <div class="flex flex-row justify-between p-2 text-slate-500">
         <div>
             <template v-for="link in props.links">
-                <Link class="hover:bg-slate-500 p-2 rounded-lg" :href="link.url ?? '#'" as="button">{{ link.label }}</Link>
+                <Link 
+                    class="p-2 rounded-lg" 
+                    :class="{ 
+                        'bg-black text-white' : link.active, 
+                        'hover:bg-none' : !link.url,
+                        'hover:bg-slate-700 hover:text-white' : !link.active && link.url
+                    }"
+                    :href="link.url ?? '#'" 
+                    as="button" 
+                    :disabled="!link.url">
+                        {{ getLinkName(link.label) }}
+                </Link>
             </template>
         </div>
         <div class="flex flex-row text-slate-500">
-            <div class="">
+            <div>
                 <span>Item per page: </span> 
+                <select class="rounded-lg" v-model="itemsPerPage">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="500">500</option>
+                </select>
             </div>
-            <span>{{ props.from }} - {{ props.to }} of {{ props.total }}</span>
+            <div class="content-center p-2">
+                <span>{{ props.from }} - {{ props.to }} of {{ props.total }}</span>
+            </div>
         </div>
     </div>
 </template>
