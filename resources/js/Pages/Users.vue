@@ -1,5 +1,6 @@
 <script setup>
     import { Head } from '@inertiajs/vue3';
+    import { ref } from 'vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import Button from "primevue/button";
     import Paginator from '@/Components/Table/Paginator.vue';
@@ -7,6 +8,8 @@
     const props = defineProps({
         users: Object
     });
+
+    const search = ref('');
 
     const headers = [
         'Name',
@@ -36,10 +39,18 @@
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
                     <div class="p-6 text-gray-900">
-                        <table class="w-full">
+                        <div class="w-full flex justify-end p-2">
+                            <input 
+                                type="text" 
+                                v-model="search"
+                                class="rounded-lg"
+                                placeholder="Search"
+                            />
+                        </div>
+                        <table class="w-full overflow-scroll">
                             <thead>
-                                <tr class="border border-black rounded-xl font-bold">
-                                    <td class="" v-for="header in headers">
+                                <tr class="font-bold border-black border-y-2">
+                                    <td class="p-2" v-for="header in headers">
                                         {{ header }}
                                     </td>
                                 </tr>
@@ -51,11 +62,11 @@
                                     :key="1"
                                     class="border-b-2 border-slate-500 p-10"
                                 >
-                                    <td>{{ user.name }}</td>
-                                    <td>Roles</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.created_at }}</td>
-                                    <td>
+                                    <td class="p-2">{{ user.name }}</td>
+                                    <td class="p-2">Roles</td>
+                                    <td class="p-2">{{ user.email }}</td>
+                                    <td class="p-2">{{ user.created_at }}</td>
+                                    <td class="p-2">
                                         <Button>ACTIONS</Button>
                                     </td>
                                 </tr>
@@ -63,6 +74,7 @@
                         </table>
                         <Paginator 
                             :links="props.users.links" 
+                            :perPage="props.users.per_page"
                             :from="props.users.from" 
                             :to="props.users.to"
                             :total="props.users.total"
@@ -70,16 +82,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <DataTable :value="props.users.data" dataKey="id" tableStyle="min-width: 50rem" :totalRecords="props.users.total">
-                <Column field="name" header="Name"/>
-                <Column field="roles" header="Roles"/>
-                <Column field="email" header="Email"/>
-                <Column field="created_at" header="Created"/>
-                <Column field="actions" header="Actions">
-                    Test
-                </Column>
-                 <Column v-for="user of props.users.data" :key="user.id" :field="user.id" :header="user.id"></Column> -->
-            <!-- </DataTable> -->
         </div>
     </AuthenticatedLayout>
 </template>

@@ -4,12 +4,13 @@
 
     const props = defineProps({
         from: Number,
+        links: Array,
+        perPage: Number,
         to: Number,
-        total: Number,
-        links: Array
+        total: Number
     });
 
-    const itemsPerPage = ref(10);
+    const itemsPerPage = ref(props.perPage);
 
     const getLinkName = (name) => {
 
