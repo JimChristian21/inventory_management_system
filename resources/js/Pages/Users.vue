@@ -1,6 +1,6 @@
 <script setup>
     import { Head, router } from '@inertiajs/vue3';
-    import { ref, watch } from 'vue';
+    import { reactive, ref, watch } from 'vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import Button from "primevue/button";
     import Paginator from '@/Components/Table/Paginator.vue';
@@ -10,29 +10,82 @@
     });
 
     const search = ref('');
+    const sort = reactive({
+        column: null,
+        order: null,
+    });
 
     const headers = [
-        'Name',
-        'Roles',
-        'Email',
-        'Created',
-        'Actions'
+        {
+            name: 'Name',
+            field: 'name',
+            type: 'string'
+        },
+        {
+            name: 'Roles',
+            field: null,
+            type: 'string'
+        },
+        {
+            name: 'Email',
+            field: 'email',
+            type: 'string'
+        },
+        {
+            name: 'Created',
+            field: 'created_at', 
+            type: 'date'
+        },
+        {
+            name: 'Actions',
+            field: null,
+            type: null
+        }
     ];
 
-    const sort = ref(null);
+    const sortBy = (column) => {
 
+        if (sort.column !== column) {
 
-    watch(search, function() {
+            sort.column = column;
+            sort.order = 'asc';
+        }
+        else {
+
+            sort.order = sort.order == 'asc'
+                ? 'desc' : 'asc';
+        }
+
+        if (column) {
+
+            router.visit(route('user.index'), {
+                method: 'get',
+                data: {
+                    search: search.value,
+                    sort: sort
+                },
+                preserveState: true,
+                replace: true
+            });
+        }
+    }
+
+    const setPerPage = (number) => {
+
+        perPage.value = number;
+    }  
+
+    watch(search, () => {
         
         router.visit(route('user.index'), {
             method: 'get',
             data: {
                 search: search.value,
             },
-            preserveState: true
+            preserveState: true,
+            replace: true
         });
     });
-
 </script>
 
 <template>
@@ -67,7 +120,10 @@
                                 <tr class="font-bold border-black border-y-2">
                                     <td class="p-2" v-for="header in headers">
                                         <div class="flex flex-row justify-between">
-                                            <h2 class="w-1/4">{{ header }}</h2>
+                                            <h2 class="w-1/4">{{ header.name }}</h2>
+                                            <button v-if="header.field" @click="sortBy(header.field)">
+                                                <font-awesome-icon :icon="['fas', 'sort']"/>
+                                            </button>
                                         </div>                                        
                                     </td>
                                 </tr>

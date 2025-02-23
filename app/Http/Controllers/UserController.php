@@ -19,7 +19,8 @@ class UserController extends Controller
     public function buildQuery() 
     {
         $search = request('search');
-        $sortBy = request('sort');
+        $sort_by = request('sort');
+        $per_page = request('perPage') ?? 10;
         
         $user = User::where('id', '!=', auth()->user()->id)
             ->where(function (Builder $query) use ($search) {
@@ -28,13 +29,12 @@ class UserController extends Controller
                     && $query->where('name', 'like', "%{$search}%");
             });
 
-        if ($sortBy) 
+        if ($sort_by) 
         {
-            $sortKey = array_keys($sortBy)[0];
-            $user->orderBy($sortKey, $sortBy[$sortKey]);
+            $user->orderBy($sort_by['column'], $sort_by['order']);
         }
 
-        return $user->paginate(10)
+        return $user->paginate($per_page)
             ->withQueryString();
     }
 }

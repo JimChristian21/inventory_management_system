@@ -1,6 +1,8 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3';
-    import { ref } from 'vue';
+    import { Link, router } from '@inertiajs/vue3';
+    import { ref, watch } from 'vue';
+    
+    const emit = defineEmits(['setPerPage']);
 
     const props = defineProps({
         from: Number,
@@ -27,6 +29,18 @@
 
         return ret;
     }
+
+    watch(itemsPerPage, () => {
+
+        router.visit(route('user.index'), {
+            method: 'get',
+            data: {
+                perPage: itemsPerPage.value
+            },
+            preserveState: true,
+            replace: true
+        });
+    });
 </script>
 
 <template>
@@ -40,7 +54,7 @@
                         'hover:bg-none' : !link.url,
                         'hover:bg-slate-700 hover:text-white' : !link.active && link.url
                     }"
-                    :href="link.url" 
+                    :href="link.url ?? '#'" 
                     as="button" 
                     :disabled="!link.url"
                     preserve-state
