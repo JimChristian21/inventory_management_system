@@ -40,9 +40,11 @@
                         'hover:bg-none' : !link.url,
                         'hover:bg-slate-700 hover:text-white' : !link.active && link.url
                     }"
-                    :href="link.url ?? '#'" 
+                    :href="link.url" 
                     as="button" 
-                    :disabled="!link.url">
+                    :disabled="!link.url"
+                    preserve-state
+                >
                         {{ getLinkName(link.label) }}
                 </Link>
             </template>
@@ -59,7 +61,7 @@
                 </select>
             </div>
             <div class="content-center p-2">
-                <span>{{ props.from }} - {{ props.to }} of {{ props.total }}</span>
+                <span>{{ props.from ?? 0 }} - {{ props.to ?? 0 }} of {{ props.total }}</span>
             </div>
         </div>
     </div>

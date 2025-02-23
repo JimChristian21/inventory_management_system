@@ -1,6 +1,6 @@
 <script setup>
-    import { Head } from '@inertiajs/vue3';
-    import { ref } from 'vue';
+    import { Head, router } from '@inertiajs/vue3';
+    import { ref, watch } from 'vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import Button from "primevue/button";
     import Paginator from '@/Components/Table/Paginator.vue';
@@ -19,6 +19,20 @@
         'Actions'
     ];
 
+    const sort = ref(null);
+
+
+    watch(search, function() {
+        
+        router.visit(route('user.index'), {
+            method: 'get',
+            data: {
+                search: search.value,
+            },
+            preserveState: true
+        });
+    });
+
 </script>
 
 <template>
@@ -29,6 +43,7 @@
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
+                <font-awesome-icon :icon="['fas', 'users']" /> 
                 User Management
             </h2>
         </template>
@@ -51,7 +66,9 @@
                             <thead>
                                 <tr class="font-bold border-black border-y-2">
                                     <td class="p-2" v-for="header in headers">
-                                        {{ header }}
+                                        <div class="flex flex-row justify-between">
+                                            <h2 class="w-1/4">{{ header }}</h2>
+                                        </div>                                        
                                     </td>
                                 </tr>
                             </thead>
@@ -78,6 +95,7 @@
                             :from="props.users.from" 
                             :to="props.users.to"
                             :total="props.users.total"
+                            :search="search"
                         />
                     </div>
                 </div>
