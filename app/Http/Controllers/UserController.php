@@ -11,9 +11,14 @@ class UserController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Users', [
+        return Inertia::render('Users/Users', [
             'users' => $this->buildQuery()
         ]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Users/Create');
     }
 
     public function buildQuery() 
@@ -22,7 +27,8 @@ class UserController extends Controller
         $sort_by = request('sort');
         $per_page = request('perPage') ?? 10;
         
-        $user = User::where('id', '!=', auth()->user()->id)
+        $user = User::with(['roles'])
+            ->where('id', '!=', auth()->user()->id)
             ->where(function (Builder $query) use ($search) {
 
                 !empty($search)

@@ -53,6 +53,8 @@ class User extends Authenticatable
             Role::class, 
             User_role::class,
             'user_id',
+            'code',
+            'id',
             'role_code'
         );
     }

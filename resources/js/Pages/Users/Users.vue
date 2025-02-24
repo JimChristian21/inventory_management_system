@@ -2,8 +2,10 @@
     import { Head, router } from '@inertiajs/vue3';
     import { reactive, ref, watch } from 'vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+    import UserCreate from '@/Components/User/UserCreate.vue';
     import Button from "primevue/button";
     import Paginator from '@/Components/Table/Paginator.vue';
+import { debounce } from 'lodash';
     
     const props = defineProps({
         users: Object
@@ -14,6 +16,7 @@
         column: null,
         order: null,
     });
+    const create = ref(false);
 
     const headers = [
         {
@@ -70,12 +73,12 @@
         }
     }
 
-    const setPerPage = (number) => {
+    const setCreate = (value) => {
 
-        perPage.value = number;
-    }  
+        create.value = value;
+    }
 
-    watch(search, () => {
+    watch(search, debounce(() => {
         
         router.visit(route('user.index'), {
             method: 'get',
@@ -83,9 +86,9 @@
                 search: search.value,
             },
             preserveState: true,
-            replace: true
+            replace: truew
         });
-    });
+    }, 400));
 </script>
 
 <template>
@@ -101,19 +104,32 @@
             </h2>
         </template>
 
+        <div v-if="create" class="absolute w-full">
+            <div class="w-1/2 mx-auto  h-full  bg-slate-500 p-5 rounded-lg mt-100">
+                <UserCreate @cancel="setCreate(false)"/>
+            </div>
+        </div>
+
         <div class="py-12 px-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
                     <div class="p-6 text-gray-900">
-                        <div class="w-full flex justify-end p-2">
-                            <input 
-                                type="text" 
-                                v-model="search"
-                                class="rounded-lg"
-                                placeholder="Search"
-                            />
+                        <div class="w-full flex justify-between p-2">
+                            <div>
+                                <button class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" @click="setCreate(!create)">
+                                    New
+                                </button>
+                            </div>
+                            <div>
+                                <input
+                                    type="text" 
+                                    v-model="search"
+                                    class="rounded-lg"
+                                    placeholder="Search"
+                                />
+                            </div>
                         </div>
                         <table class="w-full overflow-scroll">
                             <thead>
@@ -136,7 +152,11 @@
                                     class="border-b-2 border-slate-500 p-10"
                                 >
                                     <td class="p-2">{{ user.name }}</td>
-                                    <td class="p-2">Roles</td>
+                                    <td class="p-2">
+                                        <template v-for="role in user.roles">
+                                            <span>{{ role.name }}</span>
+                                        </template>
+                                    </td>
                                     <td class="p-2">{{ user.email }}</td>
                                     <td class="p-2">{{ user.created_at }}</td>
                                     <td class="p-2">
