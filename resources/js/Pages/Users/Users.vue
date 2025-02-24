@@ -3,9 +3,8 @@
     import { reactive, ref, watch } from 'vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import UserCreate from '@/Components/User/UserCreate.vue';
-    import Button from "primevue/button";
     import Paginator from '@/Components/Table/Paginator.vue';
-import { debounce } from 'lodash';
+    import { debounce } from 'lodash';
     
     const props = defineProps({
         users: Object
@@ -86,13 +85,18 @@ import { debounce } from 'lodash';
                 search: search.value,
             },
             preserveState: true,
-            replace: truew
+            replace: true
         });
     }, 400));
 </script>
 
 <template>
     <Head title="User Management" />
+    <div v-if="create" class="absolute w-full h-full bg-black/75">
+        <div class="w-1/2 h-100 mx-auto my-auto bg-slate-500 p-5 rounded-lg">
+            <UserCreate @cancel="setCreate(false)"/>
+        </div>
+    </div>
 
     <AuthenticatedLayout>
         <template #header>
@@ -104,12 +108,7 @@ import { debounce } from 'lodash';
             </h2>
         </template>
 
-        <div v-if="create" class="absolute w-full">
-            <div class="w-1/2 mx-auto  h-full  bg-slate-500 p-5 rounded-lg mt-100">
-                <UserCreate @cancel="setCreate(false)"/>
-            </div>
-        </div>
-
+        
         <div class="py-12 px-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
@@ -160,7 +159,7 @@ import { debounce } from 'lodash';
                                     <td class="p-2">{{ user.email }}</td>
                                     <td class="p-2">{{ user.created_at }}</td>
                                     <td class="p-2">
-                                        <Button>ACTIONS</Button>
+                                        <h2>ACTIONS</h2>
                                     </td>
                                 </tr>
                             </tbody>
