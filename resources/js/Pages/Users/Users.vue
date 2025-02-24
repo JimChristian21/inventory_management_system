@@ -92,8 +92,8 @@
 
 <template>
     <Head title="User Management" />
-    <div v-if="create" class="absolute w-full h-full bg-black/75">
-        <div class="w-1/2 h-100 mx-auto my-auto bg-slate-500 p-5 rounded-lg">
+    <div v-if="create" class="absolute w-full h-full bg-black/75 pt-[2%]">
+        <div class="w-1/2 h-100 mx-auto my-auto bg-white p-5 rounded-lg">
             <UserCreate @cancel="setCreate(false)"/>
         </div>
     </div>
