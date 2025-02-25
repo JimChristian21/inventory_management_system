@@ -71,65 +71,6 @@
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
-                    <!-- <div class="p-6 text-gray-900">
-                        <div class="w-full flex justify-between p-2">
-                            <div>
-                                <button class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" @click="setCreate(!create)">
-                                    New
-                                </button>
-                            </div>
-                            <div>
-                                <input
-                                    type="text" 
-                                    v-model="search"
-                                    class="rounded-lg"
-                                    placeholder="Search"
-                                />
-                            </div>
-                        </div>
-                        <table class="w-full overflow-scroll">
-                            <thead>
-                                <tr class="font-bold border-black border-y-2">
-                                    <td class="p-2" v-for="header in headers">
-                                        <div class="flex flex-row justify-between">
-                                            <h2 class="w-1/4">{{ header.name }}</h2>
-                                            <button v-if="header.field" @click="sortBy(header.field)">
-                                                <font-awesome-icon :icon="['fas', 'sort']"/>
-                                            </button>
-                                        </div>                                        
-                                    </td>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr 
-                                    v-for="user in props.users.data" 
-                                    :key="1"
-                                    class="border-b-2 border-slate-500 p-10"
-                                >
-                                    <td class="p-2">{{ user.name }}</td>
-                                    <td class="p-2">
-                                        <template v-for="role in user.roles">
-                                            <span>{{ role.name }}</span>
-                                        </template>
-                                    </td>
-                                    <td class="p-2">{{ user.email }}</td>
-                                    <td class="p-2">{{ user.created_at }}</td>
-                                    <td class="p-2">
-                                        <h2>ACTIONS</h2>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <Paginator 
-                            :links="props.users.links" 
-                            :perPage="props.users.per_page"
-                            :from="props.users.from" 
-                            :to="props.users.to"
-                            :total="props.users.total"
-                            :search="search"
-                        />
-                    </div> -->
                     <DataTable
                         :route="route('user.index')"
                         :headers="headers"
