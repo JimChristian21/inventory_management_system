@@ -1,15 +1,32 @@
 <script setup>
     import { Link, router } from '@inertiajs/vue3';
     import { ref, watch } from 'vue';
-    
-    const emit = defineEmits(['setPerPage']);
 
     const props = defineProps({
-        from: Number,
-        links: Array,
-        perPage: Number,
-        to: Number,
-        total: Number
+        route: {
+            type: String,
+            default: '#',
+        },
+        from: {
+            type: Number,
+            default: 0
+        },
+        to: {
+            type: Number,
+            default: 0
+        },
+        links: {
+            type: Array,
+            default: [],
+        },
+        perPage: {
+            type: Number,
+            default: 10
+        },
+        total: {
+            type: Number,
+            default: 0
+        },
     });
 
     const itemsPerPage = ref(props.perPage);
@@ -32,7 +49,7 @@
 
     watch(itemsPerPage, () => {
 
-        router.visit(route('user.index'), {
+        router.visit(route), {
             method: 'get',
             data: {
                 perPage: itemsPerPage.value
@@ -75,7 +92,7 @@
                 </select>
             </div>
             <div class="content-center p-2">
-                <span>{{ props.from ?? 0 }} - {{ props.to ?? 0 }} of {{ props.total }}</span>
+                <span>{{ props.from }} - {{ props.to }} of {{ props.total }}</span>
             </div>
         </div>
     </div>

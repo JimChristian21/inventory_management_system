@@ -1,20 +1,16 @@
 <script setup>
-    import { Head, router } from '@inertiajs/vue3';
-    import { reactive, ref, watch } from 'vue';
+    import { Head } from '@inertiajs/vue3';
+    import { ref } from 'vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import UserCreate from '@/Components/User/UserCreate.vue';
-    import Paginator from '@/Components/Table/Paginator.vue';
-    import { debounce } from 'lodash';
+    import DataTable from '@/Components/Table/DataTable.vue';
+    import Row from '@/Components/Table/Row.vue';
+    import Column from '@/Components/Table/Column.vue';
     
     const props = defineProps({
         users: Object
     });
 
-    const search = ref('');
-    const sort = reactive({
-        column: null,
-        order: null,
-    });
     const create = ref(false);
 
     const headers = [
@@ -45,49 +41,10 @@
         }
     ];
 
-    const sortBy = (column) => {
-
-        if (sort.column !== column) {
-
-            sort.column = column;
-            sort.order = 'asc';
-        }
-        else {
-
-            sort.order = sort.order == 'asc'
-                ? 'desc' : 'asc';
-        }
-
-        if (column) {
-
-            router.visit(route('user.index'), {
-                method: 'get',
-                data: {
-                    search: search.value,
-                    sort: sort
-                },
-                preserveState: true,
-                replace: true
-            });
-        }
-    }
-
     const setCreate = (value) => {
 
         create.value = value;
     }
-
-    watch(search, debounce(() => {
-        
-        router.visit(route('user.index'), {
-            method: 'get',
-            data: {
-                search: search.value,
-            },
-            preserveState: true,
-            replace: true
-        });
-    }, 400));
 </script>
 
 <template>
@@ -108,13 +65,12 @@
             </h2>
         </template>
 
-        
         <div class="py-12 px-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
-                    <div class="p-6 text-gray-900">
+                    <!-- <div class="p-6 text-gray-900">
                         <div class="w-full flex justify-between p-2">
                             <div>
                                 <button class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" @click="setCreate(!create)">
@@ -172,7 +128,32 @@
                             :total="props.users.total"
                             :search="search"
                         />
-                    </div>
+                    </div> -->
+                    <DataTable
+                        :route="route('user.index')"
+                        :headers="headers"
+                        :paginatorOptions="{
+                            links: props.users.links,
+                            perPage: props.users.per_page,
+                            from: props.users.from,
+                            to: props.users.to,
+                            total: props.users.total
+                        }"
+                    >
+                        <template #body>
+                            <Row v-for="user in props.users.data">
+                                <Column>{{ user.name }}</Column>
+                                <Column>
+                                    <div v-for="role in user.roles">
+                                        <span>{{ role }}</span>
+                                    </div>
+                                </Column>
+                                <Column>{{ user.email }}</Column>
+                                <Column>{{ user.created_at }}</Column>
+                                <Column>ACTION</Column>
+                            </Row>
+                        </template>
+                    </DataTable>
                 </div>
             </div>
         </div>
