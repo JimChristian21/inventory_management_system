@@ -76,7 +76,7 @@
                     :disabled="!link.url"
                     preserve-state
                 >
-                        {{ getLinkName(link.label) }}
+                    {{ getLinkName(link.label) }}
                 </Link>
             </template>
         </div>
