@@ -49,6 +49,7 @@
 
 <template>
     <Head title="User Management" />
+    
     <div v-if="create" class="absolute w-full h-full bg-black/75 pt-[2%]">
         <div class="w-1/2 h-100 mx-auto my-auto bg-white p-5 rounded-lg">
             <UserCreate @cancel="setCreate(false)"/>
@@ -140,6 +141,13 @@
                             total: props.users.total
                         }"
                     >
+                        <template #headerActions>
+                            <div>
+                                <button class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" @click="setCreate(!create)">
+                                    New
+                                </button>
+                            </div>
+                        </template>
                         <template #body>
                             <Row v-for="user in props.users.data">
                                 <Column>{{ user.name }}</Column>
