@@ -49,7 +49,7 @@
 
     watch(itemsPerPage, () => {
 
-        router.visit(route), {
+        router.visit(props.route, {
             method: 'get',
             data: {
                 perPage: itemsPerPage.value

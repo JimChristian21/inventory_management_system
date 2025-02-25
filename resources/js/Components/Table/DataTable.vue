@@ -1,6 +1,9 @@
 <script setup>
 
-import { ref } from 'vue';
+import { debounce } from 'lodash';
+import { reactive, ref, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
+import Paginator from './Paginator.vue';
 
 const props = defineProps({
     headers: {
@@ -51,8 +54,8 @@ const sortBy = (column) => {
 }
 
 watch(search, debounce(() => {
-        
-    router.visit(route(props.route), {
+    
+    router.visit(props.route, {
         method: 'get',
         data: {
             search: search.value,
@@ -97,7 +100,7 @@ watch(search, debounce(() => {
             </tbody>
         </table>
         <Paginator
-            :route="route"
+            :route="props.route"
             :links="props.paginatorOptions.links" 
             :perPage="props.paginatorOptions.per_page"
             :from="props.paginatorOptions.from"

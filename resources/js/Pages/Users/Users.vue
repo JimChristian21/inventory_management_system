@@ -153,7 +153,7 @@
                                 <Column>{{ user.name }}</Column>
                                 <Column>
                                     <div v-for="role in user.roles">
-                                        <span>{{ role }}</span>
+                                        <span>{{ role.name }}</span>
                                     </div>
                                 </Column>
                                 <Column>{{ user.email }}</Column>
