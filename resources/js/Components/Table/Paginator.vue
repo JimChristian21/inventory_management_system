@@ -92,7 +92,7 @@
                 </select>
             </div>
             <div class="content-center p-2">
-                <span>{{ props.from }} - {{ props.to }} of {{ props.total }}</span>
+                <span>{{ props.from ?? 0 }} - {{ props.to ?? 0 }} of {{ props.total }}</span>
             </div>
         </div>
     </div>

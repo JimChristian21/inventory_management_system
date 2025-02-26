@@ -1,21 +1,35 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import SecondaryButton from '../SecondaryButton.vue';
+
+const props = defineProps({
+    errors: {
+        type: Object,
+        default: {
+            name: null,
+            roles: null,
+            email: null,
+            password: null,
+            password_confirmation: null
+        }
+    }
+});
 
 const form = useForm({
     name: '',
+    roles: '',
     email: '',
     password: '',
     password_confirmation: '',
 });
 
 const submit = () => {
-    form.post(route('register'), {
+    form.post(route('user.store'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
@@ -37,7 +51,19 @@ const submit = () => {
                     autocomplete="name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError v-if="props.errors.name" class="mt-2" :message="props.errors.name" />
+            </div>
+
+            <div>
+                <InputLabel for="roles" value="Role" />
+
+                <select id="roles" class="rounded-lg mt-1 block w-full" v-model="form.roles">
+                    <option value="" disabled>Please select a role</option>
+                    <option value="ADMIN">Administrator</option>
+                    <option value="SUPPORT">Support</option>
+                </select>
+
+                <InputError v-if="props.errors.roles" class="mt-2" :message="props.errors.roles" />
             </div>
 
             <div class="mt-4">
@@ -52,7 +78,7 @@ const submit = () => {
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError v-if="props.errors.email" class="mt-2" :message="props.errors.email" />
             </div>
 
             <div class="mt-4">
@@ -67,7 +93,7 @@ const submit = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError v-if="props.errors.password" class="mt-2" :message="props.errors.password" />
             </div>
 
             <div class="mt-4">
@@ -86,8 +112,9 @@ const submit = () => {
                 />
 
                 <InputError
+                    v-if="props.errors.password_confirmation"
                     class="mt-2"
-                    :message="form.errors.password_confirmation"
+                    :message="props.errors.password_confirmation"
                 />
             </div>
 

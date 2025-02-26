@@ -27,10 +27,23 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(UserStoreRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
+        // dd('store');
+        $validated = $request->validateWithBag('create', [
+            'name' => 'required|string',
+            'roles' => 'required|exists:roles,code',
+            'email' => 'required|string|lowercase|email|max:255',
+            'password' => 'required|confirmed'
+        ]);
 
         $data = $this->user_lib->create($validated);
+
+        return NULL;
+    }
+
+    public function create()
+    {
+        dd('create_control');
     }
 }

@@ -9,6 +9,7 @@ class User {
 
     public function create($data)
     {
+        dd('create');
         return false;
     }
 
@@ -19,7 +20,7 @@ class User {
         $per_page = request('perPage') ?? 10;
         
         $user = UserModel::with(['roles'])
-            ->where('id', operator: '!=', auth()->user()->id)
+            ->where('id', '!=', auth()->user()->id)
             ->where(function (Builder $query) use ($search) {
 
                 !empty($search)

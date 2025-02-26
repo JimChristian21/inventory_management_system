@@ -82,30 +82,34 @@ watch(search, debounce(() => {
                 />
             </div>
         </div>
-        <table class="w-full overflow-scroll">
-            <thead>
-                <tr class="font-bold border-black border-y-2">
-                    <td class="p-2" v-for="header in props.headers">
-                        <div class="flex flex-row justify-between">
-                            <h2 class="w-1/4">{{ header.name }}</h2>
-                            <button v-if="header.field" @click="sortBy(header.field)">
-                                <font-awesome-icon :icon="['fas', 'sort']"/>
-                            </button>
-                        </div>                                        
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                <slot name="body"></slot>
-            </tbody>
-        </table>
-        <Paginator
-            :route="props.route"
-            :links="props.paginatorOptions.links" 
-            :perPage="props.paginatorOptions.per_page"
-            :from="props.paginatorOptions.from"
-            :to="props.paginatorOptions.to"
-            :total="props.paginatorOptions.total"
-        />
+        <div>
+            <div class="max-h-[450px] overflow-y-scroll overflow-x-hidden">
+                <table class="w-full">
+                    <thead>
+                        <tr class="font-bold border-black border-y-2">
+                            <td class="p-2" v-for="header in props.headers">
+                                <div class="flex flex-row justify-between">
+                                    <h2 class="w-1/4">{{ header.name }}</h2>
+                                    <button v-if="header.field" @click="sortBy(header.field)">
+                                        <font-awesome-icon :icon="['fas', 'sort']"/>
+                                    </button>
+                                </div>                                        
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <slot name="body"></slot>
+                    </tbody>
+                </table>
+            </div>
+            <Paginator
+                :route="props.route"
+                :links="props.paginatorOptions.links" 
+                :perPage="props.paginatorOptions.per_page"
+                :from="props.paginatorOptions.from"
+                :to="props.paginatorOptions.to"
+                :total="props.paginatorOptions.total"
+            />
+        </div>
     </div>
 </template>

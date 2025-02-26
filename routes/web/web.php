@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/users', [UserController::class, 'index'])->name('user.index');
+    Route::post('/users', [UserController::class, 'store'])->name('user.store');
 
     Route::get('/', function () {
         return redirect()->route('dashboard');
