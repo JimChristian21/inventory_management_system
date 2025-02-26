@@ -29,7 +29,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // dd('store');
         $validated = $request->validateWithBag('create', [
             'name' => 'required|string',
             'roles' => 'required|exists:roles,code',
@@ -40,10 +39,5 @@ class UserController extends Controller
         $data = $this->user_lib->create($validated);
 
         return NULL;
-    }
-
-    public function create()
-    {
-        dd('create_control');
     }
 }
