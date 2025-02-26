@@ -2,40 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+
+use App\Http\Requests\UserStoreRequest;
+use App\Models\User;
+use App\Libraries\User as UserLib;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    protected $user_lib;
+
+    public function __construct() 
+    {
+        $this->user_lib = new UserLib();
+    }
     public function index()
     {
+        $users = $this->user_lib->get_paginated_users();
+
         return Inertia::render('Users/Users', [
-            'users' => $this->buildQuery()
+            'users' =>  $users
         ]);
     }
 
-    public function buildQuery() 
+    public function store(UserStoreRequest $request)
     {
-        $search = request('search');
-        $sort_by = request('sort');
-        $per_page = request('perPage') ?? 10;
-        
-        $user = User::with(['roles'])
-            ->where('id', '!=', auth()->user()->id)
-            ->where(function (Builder $query) use ($search) {
+        $validated = $request->validated();
 
-                !empty($search)
-                    && $query->where('name', 'like', "%{$search}%");
-            });
-
-        if ($sort_by) 
-        {
-            $user->orderBy($sort_by['column'], $sort_by['order']);
-        }
-
-        return $user->paginate($per_page)
-            ->withQueryString();
+        $data = $this->user_lib->create($validated);
     }
 }
