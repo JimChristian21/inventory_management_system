@@ -37,8 +37,6 @@ class UserController extends Controller
 
         $created_user = $this->user_lib->create($data);
 
-        $ret = redirect()->route('user.index');
-
         $message = $created_user
             ? 'User created successfuly!'
                 : 'Failed creating user!';
