@@ -15,6 +15,7 @@ class UserController extends Controller
     {
         $this->user_lib = new UserLib();
     }
+    
     public function index()
     {
         $users = $this->user_lib->get_paginated_users();
