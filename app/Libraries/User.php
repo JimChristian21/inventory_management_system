@@ -14,12 +14,12 @@ class User {
     {
         $ret = FALSE;
 
-        DB::transaction(function () use ($data) {
+        DB::transaction(function () use ($data, &$ret) {
 
             $user = UserModel::create([
                 'name' => $data->name,
                 'email' => $data->email,
-                'password' => Hash::make($data->password) 
+                'password' => Hash::make($data->password)
             ]);
             
             $user
@@ -33,6 +33,48 @@ class User {
                 ->get();
         });
         
+        return $ret;
+    }
+
+    public function update($data): mixed
+    {
+        $ret = FALSE;
+
+        DB::transaction(function () use ($data, &$ret) {
+
+            $user = UserModel::find($data->id);
+
+            if ($user) 
+            {
+                unset($data->id);
+
+                foreach($data as $attribute => $value) 
+                {
+                    property_exists($user, $attribute)
+                        && $user->{$attribute} != $value
+                        && $user->{$attribute} = $value;
+
+                    if ($user->isDirty())
+                    {
+                        $user->save();
+                        $ret = TRUE;
+                    }
+                }
+            }
+        });
+        
+        return $ret;
+    }
+
+    public function delete(int $id)
+    {
+        $ret = FALSE;
+
+        DB::transaction(function() use ($id, &$ret) {
+
+            $ret = UserModel::destroy($id);
+        });
+
         return $ret;
     }
 
