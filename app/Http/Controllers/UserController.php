@@ -36,8 +36,15 @@ class UserController extends Controller
 
         $data = $request->all();
 
-        $data = $this->user_lib->create($data);
+        $created_user = $this->user_lib->create($data);
 
-        return NULL;
+        $ret = redirect()->route('user.index');
+        $message = $created_user
+            ? 'User created successfuly!'
+                : 'Failed creating user!';
+
+        return redirect()
+            ->route('user.index')
+            ->with('message', $message);
     }
 }
