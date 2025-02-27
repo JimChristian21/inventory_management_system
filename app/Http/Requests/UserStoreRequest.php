@@ -9,10 +9,10 @@ class UserStoreRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    // public function authorize(): bool
-    // {
-    //     return true;
-    // }
+    public function authorize(): bool
+    {
+        return true;
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -22,16 +22,10 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'roles' => ['required', 'exists:roles,code'],
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-            ],
-            'password' => ['required', 'confirmed']
+            'name' => 'required|string',
+            'roles' => 'required|exists:roles,code',
+            'email' => 'required|string|lowercase|email|max:255',
+            'password' => 'required|confirmed'
         ];
     }
 }

@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 use App\Http\Requests\UserStoreRequest;
-use App\Models\User;
 use App\Libraries\User as UserLib;
 use Inertia\Inertia;
 
@@ -36,7 +34,9 @@ class UserController extends Controller
             'password' => 'required|confirmed'
         ]);
 
-        $data = $this->user_lib->create($validated);
+        $data = $request->all();
+
+        $data = $this->user_lib->create($data);
 
         return NULL;
     }
