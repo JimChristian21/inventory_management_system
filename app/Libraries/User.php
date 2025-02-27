@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class User {
 
-    public function create($data): mixed
+    public function create(object $data): mixed
     {
         $ret = FALSE;
 
@@ -28,7 +28,7 @@ class User {
                     'role_code' => $data->roles
                 ]);
 
-            $ret = User::find($user->id)
+            $ret = UserModel::find($user->id)
                 ->with('roles')
                 ->get();
         });
@@ -36,29 +36,29 @@ class User {
         return $ret;
     }
 
-    public function update($data): mixed
+    public function update($id, $data): mixed
     {
         $ret = FALSE;
 
-        DB::transaction(function () use ($data, &$ret) {
+        DB::transaction(function () use ($id, $data, &$ret) {
 
-            $user = UserModel::find($data->id);
+            $user = UserModel::find($id);
 
             if ($user) 
             {
-                unset($data->id);
+                $user->name = $data->name;
+                
+                $user_role = User_role::where('user_id', '=', $user->id)
+                    ->where('role_code', '=', $user->roles[0]->code)
+                    ->get()[0];
 
-                foreach($data as $attribute => $value) 
-                {
-                    property_exists($user, $attribute)
-                        && $user->{$attribute} != $value
-                        && $user->{$attribute} = $value;
+                if ($user_role) {
 
-                    if ($user->isDirty())
-                    {
-                        $user->save();
-                        $ret = TRUE;
-                    }
+                    $user_role->role_code = $data->roles;
+                    
+                    $user->save()
+                        && $user_role->save()
+                        && $ret = TRUE;
                 }
             }
         });
@@ -72,10 +72,19 @@ class User {
 
         DB::transaction(function() use ($id, &$ret) {
 
-            $ret = UserModel::destroy($id);
+            $user = $this->get_user($id);
+
+            $user
+                && $user->delete()
+                && $ret = TRUE;
         });
 
         return $ret;
+    }
+
+    public function get_user($id)
+    {
+        return UserModel::find($id);
     }
 
     public function get_paginated_users()

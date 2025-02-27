@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('user.index');
     Route::post('/users', [UserController::class, 'store'])->name('user.store');
+    Route::patch('/users/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::post('/users/{id}', [UserController::class, 'destroy'])->name('user.delete');
 
     Route::get('/', function () {
         return redirect()->route('dashboard');

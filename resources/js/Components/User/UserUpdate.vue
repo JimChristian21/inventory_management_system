@@ -8,36 +8,41 @@ import { useForm } from '@inertiajs/vue3';
 import SecondaryButton from '../SecondaryButton.vue';
 
 const props = defineProps({
+    user: {
+        id: {
+            type: Number,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        roles: {
+            type: String,
+            required: true
+        }
+    },
     errors: {
         type: Object,
         default: { 
             name: null,
             roles: null,
-            email: null,
-            password: null,
-            password_confirmation: null
+            email: null
         }
     }
 });
 
-const emit = defineEmits(['cancelCreate']);
+const emit = defineEmits(['cancelUpdate']);
 
 const form = useForm({
-    name: '',
-    roles: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: props.user.name,
+    roles: props.user.roles[0].code
 });
 
 const submit = () => {
-    form.post(route('user.store'), {
+    form.patch(route('user.update', props.user.id), {
         onSuccess: () => {
-            form.reset('password', 'password_confirmation');
-            emit('cancelCreate');
-        },
-        onFailure: () => {
-            form.reset('password', 'password_confirmation');
+            emit('cancelUpdate');
         }
     });
 };
@@ -74,72 +79,20 @@ const submit = () => {
                 <InputError v-if="props.errors.roles" class="mt-2" :message="props.errors.roles" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError v-if="props.errors.email" class="mt-2" :message="props.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError v-if="props.errors.password" class="mt-2" :message="props.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    v-if="props.errors.password_confirmation"
-                    class="mt-2"
-                    :message="props.errors.password_confirmation"
-                />
-            </div>
-
             <div class="mt-4 flex items-center justify-end">
                 <PrimaryButton
                     class="ms-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    Update
                 </PrimaryButton>
 
                 <SecondaryButton
                     class="ms-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
-                    @click="$emit('cancelCreate')"
+                    @click="$emit('cancelUpdate')"
                 >
                     Cancel
                 </SecondaryButton>

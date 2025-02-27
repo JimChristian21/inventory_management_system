@@ -11,6 +11,8 @@ class User_role extends Model
         'role_code'
     ];
 
+    public $timestamps = false;
+
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_code', 'code');

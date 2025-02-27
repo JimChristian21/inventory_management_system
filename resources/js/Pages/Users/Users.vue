@@ -1,8 +1,9 @@
 <script setup>
-    import { Head } from '@inertiajs/vue3';
+    import { Head, Link } from '@inertiajs/vue3';
     import { ref } from 'vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import UserCreate from '@/Components/User/UserCreate.vue';
+    import UserUpdate from '@/Components/User/UserUpdate.vue';
     import DataTable from '@/Components/Table/DataTable.vue';
     import Row from '@/Components/Table/Row.vue';
     import Column from '@/Components/Table/Column.vue';
@@ -11,7 +12,9 @@
         users: Object
     });
 
-    const create = ref(false);
+    const isCreate = ref(false);
+    const isUpdate = ref(false);
+    const userInfo = ref(null);
 
     const headers = [
         {
@@ -41,18 +44,39 @@
         }
     ];
 
-    const setCreate = (value) => {
+    const updateUser = (data) => {
 
-        create.value = value;
+        userInfo.value = data;
+        setIsUpdate(true);
     }
+
+    const setIsCreate = (value) => {
+
+        isCreate.value = value;
+    }
+
+    const setIsUpdate = (value) => {
+
+        isUpdate.value = value;
+    }
+    
 </script>
 
 <template>
     <Head title="User Management" />
     
-    <div v-if="create" class="absolute w-full h-full bg-black/75 pt-[2%]">
+    <div v-if="isCreate" class="absolute w-full h-full bg-black/75 pt-[2%]">
         <div class="w-1/2 h-100 mx-auto my-auto bg-white p-5 rounded-lg">
-            <UserCreate :errors="$page.props.errors.create" @cancel="setCreate(false)"/>
+            <UserCreate :errors="$page.props.errors.create" @cancelCreate="setIsCreate(false)"/>
+        </div>
+    </div>
+
+    <div v-if="isUpdate" class="absolute w-full h-full bg-black/75 pt-[2%]">
+        <div class="w-1/2 h-100 mx-auto my-auto bg-white p-5 rounded-lg">
+            <UserUpdate
+                :user="userInfo" 
+                :errors="$page.props.errors.update" 
+                @cancelUpdate="setIsUpdate(false)"/>
         </div>
     </div>
 
@@ -84,7 +108,7 @@
                     >
                         <template #headerActions>
                             <div>
-                                <button class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" @click="setCreate(!create)">
+                                <button class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" @click="setIsCreate(!create)">
                                     New
                                 </button>
                             </div>
@@ -99,7 +123,21 @@
                                 </Column>
                                 <Column>{{ user.email }}</Column>
                                 <Column>{{ user.created_at }}</Column>
-                                <Column>ACTION</Column>
+                                <Column class="flex flex-row gap-2 justify-center">
+                                    <button 
+                                        class="cursor-pointer text-orange-400"
+                                        @click="updateUser(user)"
+                                    >
+                                        <font-awesome-icon :icon="['fas', 'pencil-alt']" />
+                                    </button>
+                                    <Link 
+                                        :href="route('user.delete', user.id)"
+                                        class="cursor-pointer"
+                                        method="post"
+                                    >
+                                        <font-awesome-icon :icon="['fas', 'trash']" class="text-red-600" />
+                                    </Link>
+                                </Column>
                             </Row>
                         </template>
                     </DataTable>
