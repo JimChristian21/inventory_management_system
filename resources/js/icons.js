@@ -4,7 +4,8 @@ import {
     faUsers, 
     faSort,
     faTrash,
-    faPencilAlt
+    faPencilAlt,
+    faWarehouse
 } from '@fortawesome/free-solid-svg-icons';
 
 const icons = [
@@ -12,7 +13,8 @@ const icons = [
     faUserSecret,
     faUsers,
     faTrash,
-    faPencilAlt
+    faPencilAlt,
+    faWarehouse
 ];
 
 icons.forEach((icon) => {

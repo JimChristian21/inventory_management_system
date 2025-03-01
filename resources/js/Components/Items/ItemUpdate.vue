@@ -43,7 +43,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('item.update', props.item.id), {
+    form.patch(route('item.update', props.item.id), {
         onSuccess: () => {
             form.reset();
             emit('cancelUpdate');

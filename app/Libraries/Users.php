@@ -70,14 +70,14 @@ class Users {
     {
         $ret = FALSE;
 
-        DB::transaction(function() use ($id, &$ret) {
+        if ($user = $this->get_user($id)) 
+        {
+            DB::transaction(function() use ($user, &$ret) {
 
-            $user = $this->get_user($id);
-
-            $user
-                && $user->delete()
-                && $ret = TRUE;
-        });
+                $ret = $user->delete();
+            });
+        }
+        
 
         return $ret;
     }

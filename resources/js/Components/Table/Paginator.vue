@@ -63,21 +63,23 @@
 <template>
     <div class="flex flex-row justify-between p-2 text-slate-500">
         <div>
-            <template v-for="link in props.links">
-                <Link 
-                    class="p-2 rounded-lg" 
-                    :class="{ 
-                        'bg-black text-white' : link.active, 
-                        'hover:bg-none' : !link.url,
-                        'hover:bg-slate-700 hover:text-white' : !link.active && link.url
-                    }"
-                    :href="link.url ?? '#'" 
-                    as="button" 
-                    :disabled="!link.url"
-                    preserve-state
-                >
-                    {{ getLinkName(link.label) }}
-                </Link>
+            <template v-if="props.links">
+                <template v-for="link in props.links">
+                    <Link 
+                        class="p-2 rounded-lg" 
+                        :class="{ 
+                            'bg-black text-white' : link.active, 
+                            'hover:bg-none' : !link.url,
+                            'hover:bg-slate-700 hover:text-white' : !link.active && link.url
+                        }"
+                        :href="link.url ?? '#'" 
+                        as="button" 
+                        :disabled="!link.url"
+                        preserve-state
+                    >
+                        {{ getLinkName(link.label) }}
+                    </Link>
+                </template>
             </template>
         </div>
         <div class="flex flex-row text-slate-500">
