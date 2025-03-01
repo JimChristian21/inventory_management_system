@@ -4,22 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Libraries\User as UserLib;
-use App\Models\User;
+use App\Libraries\Users as UsersLib;
 use Inertia\Inertia;
 
-class UserController extends Controller
+class Users extends Controller
 {
-    protected $user_lib;
+    protected $users_lib;
 
     public function __construct() 
     {
-        $this->user_lib = new UserLib();
+        $this->users_lib = new UsersLib();
     }
     
     public function index()
     {
-        $users = $this->user_lib->get_paginated_users();
+        $users = $this->users_lib->get_pagination();
 
         return Inertia::render('Users/Users', [
             'users' =>  $users
@@ -35,7 +34,7 @@ class UserController extends Controller
             'password' => 'required|confirmed'
         ]);
 
-        $created_user = $this->user_lib->create((object) $validated);
+        $created_user = $this->users_lib->create((object) $validated);
 
         $message = $created_user
             ? 'User created successfuly!'
@@ -53,7 +52,7 @@ class UserController extends Controller
             'roles' => 'required|exists:roles,code'
         ]);
 
-        $updated_user = $this->user_lib->update($id, (object) $validated);
+        $updated_user = $this->users_lib->update($id, (object) $validated);
 
         $message = $updated_user
             ? 'User updated successfuly!'
@@ -66,7 +65,7 @@ class UserController extends Controller
 
     public function destroy(Request $request, int $id)
     {
-        $is_deleted = $this->user_lib->delete($id);
+        $is_deleted = $this->users_lib->delete($id);
 
         $message = $is_deleted
             ? 'User deleted successfuly!'

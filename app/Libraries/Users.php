@@ -2,13 +2,13 @@
 
 namespace App\Libraries;
 
-use App\Models\User as UserModel;
+use App\Models\User;
 use App\Models\User_role;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class User {
+class Users {
 
     public function create(object $data): mixed
     {
@@ -16,7 +16,7 @@ class User {
 
         DB::transaction(function () use ($data, &$ret) {
 
-            $user = UserModel::create([
+            $user = User::create([
                 'name' => $data->name,
                 'email' => $data->email,
                 'password' => Hash::make($data->password)
@@ -28,7 +28,7 @@ class User {
                     'role_code' => $data->roles
                 ]);
 
-            $ret = UserModel::find($user->id)
+            $ret = User::find($user->id)
                 ->with('roles')
                 ->get();
         });
@@ -42,7 +42,7 @@ class User {
 
         DB::transaction(function () use ($id, $data, &$ret) {
 
-            $user = UserModel::find($id);
+            $user = User::find($id);
 
             if ($user) 
             {
@@ -84,16 +84,16 @@ class User {
 
     public function get_user($id)
     {
-        return UserModel::find($id);
+        return User::find($id);
     }
 
-    public function get_paginated_users()
+    public function get_pagination()
     {
         $search = request('search');
         $sort_by = request('sort');
         $per_page = request('perPage') ?? 10;
         
-        $user = UserModel::with(['roles'])
+        $user = User::with(['roles'])
             ->where('id', '!=', auth()->user()->id)
             ->where(function (Builder $query) use ($search) {
 
