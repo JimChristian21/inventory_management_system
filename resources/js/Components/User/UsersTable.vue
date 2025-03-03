@@ -1,21 +1,20 @@
 <script setup>
-
-    import { onMounted, ref } from 'vue';
-    import { Link, router } from '@inertiajs/vue3';
     
-    import ItemCreate from './ItemCreate.vue';
-    import ItemUpdate from './ItemUpdate.vue';
+    import { ref } from 'vue';
+    import UserCreate from './UserCreate.vue';
+    import UserUpdate from './UserUpdate.vue';
     import DataTable from '@/Components/Table/DataTable.vue';
-    import Column from '@/Components/Table/Column.vue';
     import Row from '@/Components/Table/Row.vue';
-    import Modal from '../Modal.vue';
-
+    import Column from '@/Components/Table/Column.vue';
+import Modal from '../Modal.vue';
+    
     const props = defineProps({
-        'items': {
-            type: Object,
-            required: true
-        }
+        users: Object
     });
+
+    const isCreate = ref(false);
+    const isUpdate = ref(false);
+    const userInfo = ref(null);
 
     const headers = [
         {
@@ -24,14 +23,19 @@
             type: 'string'
         },
         {
-            name: 'Description',
-            field: 'description',
+            name: 'Roles',
+            field: null,
             type: 'string'
         },
         {
-            name: 'Quantity',
-            field: 'quantity',
-            type: 'int'
+            name: 'Email',
+            field: 'email',
+            type: 'string'
+        },
+        {
+            name: 'Created',
+            field: 'created_at', 
+            type: 'date'
         },
         {
             name: 'Actions',
@@ -40,13 +44,9 @@
         }
     ];
 
-    const isCreate = ref(false);
-    const isUpdate = ref(false);
-    const itemInfo = ref(null);
-
     const updateUser = (data) => {
 
-        itemInfo.value = data;
+        userInfo.value = data;
         setIsUpdate(true);
     }
 
@@ -59,68 +59,68 @@
 
         isUpdate.value = value;
     }
-
 </script>
 
 <template>
     <div>
         <Modal :show="isCreate">
             <div class="w-full h-full bg-white/75 pt-[2%] p-5">
-                <ItemCreate 
-                    :errors="$page.props.errors.items_create" 
+                <UserCreate 
+                    :errors="$page.props.errors.create" 
                     @cancelCreate="setIsCreate(false)"
                 />
             </div>
         </Modal>
-
+        
         <Modal :show="isUpdate">
             <div class="w-full h-full bg-white/75 pt-[2%] p-5">
-                <ItemUpdate
-                    :item="itemInfo" 
+                <UserUpdate
+                    :user="userInfo" 
                     :errors="$page.props.errors.update" 
                     @cancelUpdate="setIsUpdate(false)"
                 />
             </div>
         </Modal>
-        
+
         <DataTable
-            :route="route('inventory.index')"
+            :route="route('user.index')"
             :headers="headers"
             :paginatorOptions="{
-                links: props.items.links,
-                perPage: props.items.per_page,
-                from: props.items.from,
-                to: props.items.to,
-                total: props.items.total
+                links: props.users.links,
+                perPage: props.users.per_page,
+                from: props.users.from,
+                to: props.users.to,
+                total: props.users.total
             }"
         >
             <template #headerActions>
                 <div>
-                    <button 
-                        class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" 
-                        @click="setIsCreate(true)"
-                    >
+                    <button class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" @click="setIsCreate(!create)">
                         New
                     </button>
                 </div>
             </template>
             <template #body>
-                <Row v-for="item in props.items.data">
-                    <Column>{{ item.name }}</Column>
-                    <Column>{{ item.description }}</Column>
-                    <Column>{{ item.quantity }}</Column>
+                <Row v-for="user in props.users.data">
+                    <Column>{{ user.name }}</Column>
+                    <Column>
+                        <div v-for="role in user.roles">
+                            <span>{{ role.name }}</span>
+                        </div>
+                    </Column>
+                    <Column>{{ user.email }}</Column>
+                    <Column>{{ user.created_at }}</Column>
                     <Column class="flex flex-row gap-2 justify-center">
                         <button 
                             class="cursor-pointer text-orange-400"
-                            @click="updateUser(item)"
+                            @click="updateUser(user)"
                         >
                             <font-awesome-icon :icon="['fas', 'pencil-alt']" />
                         </button>
                         <Link 
-                            :href="route('item.delete', item.id)"
+                            :href="route('user.delete', user.id)"
                             class="cursor-pointer"
-                            method="delete"
-                            as="button"
+                            method="post"
                         >
                             <font-awesome-icon :icon="['fas', 'trash']" class="text-red-600" />
                         </Link>

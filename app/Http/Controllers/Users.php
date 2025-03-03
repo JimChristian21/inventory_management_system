@@ -20,7 +20,7 @@ class Users extends Controller
     {
         $users = $this->users_lib->get_pagination();
 
-        return Inertia::render('Users/Users', [
+        return Inertia::render('Users', [
             'users' =>  $users
         ]);
     }
