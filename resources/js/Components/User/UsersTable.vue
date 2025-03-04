@@ -7,6 +7,7 @@
     import Row from '@/Components/Table/Row.vue';
     import Column from '@/Components/Table/Column.vue';
     import Modal from '../Modal.vue';
+    import { Link } from '@inertiajs/vue3';
     
     const props = defineProps({
         users: Object
@@ -120,7 +121,7 @@
                         <Link 
                             :href="route('user.delete', user.id)"
                             class="cursor-pointer"
-                            method="post"
+                            method="delete"
                         >
                             <font-awesome-icon :icon="['fas', 'trash']" class="text-red-600" />
                         </Link>
