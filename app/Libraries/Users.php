@@ -87,6 +87,18 @@ class Users {
         return User::find($id);
     }
 
+    public function get_admin_users()
+    {
+        return User::whereHas('roles', function(Builder $query) {
+            $query->where('code', '=', 'ADMIN');
+        })->get();
+    }
+
+    public function get_users_email_and_name(User $users)
+    {
+
+    }
+
     public function get_pagination()
     {
         $search = request('search');

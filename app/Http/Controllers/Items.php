@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libraries\Items as ItemsLib;
 use App\Mail\LowItemNotification;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -34,7 +35,7 @@ class Items extends Controller
     public function update(Request $request, $id)
     {
         $validated = (object) $request->validateWithBag('items_create', [
-            'name' => 'required|string|unique:items,name',
+            'name' => 'required|string',
             'description' => 'required|string',
             'quantity' => 'required|integer|min:0',
             'critical_quantity' => 'required|integer|min:0'
@@ -44,7 +45,7 @@ class Items extends Controller
 
         if ($validated->quantity <= $validated->critical_quantity)
         {
-            Mail::to($request->user())->send( new LowItemNotification());
+            Mail::to($request->user())->send( new LowItemNotification($id));
         }
 
         return redirect()->route('inventory.index');
