@@ -1,6 +1,6 @@
 <script setup>
 
-    import { onMounted, ref } from 'vue';
+    import { ref } from 'vue';
     import { Link, router } from '@inertiajs/vue3';
     
     import ItemCreate from './ItemCreate.vue';

@@ -6,7 +6,7 @@
     import DataTable from '@/Components/Table/DataTable.vue';
     import Row from '@/Components/Table/Row.vue';
     import Column from '@/Components/Table/Column.vue';
-import Modal from '../Modal.vue';
+    import Modal from '../Modal.vue';
     
     const props = defineProps({
         users: Object

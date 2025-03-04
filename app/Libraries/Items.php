@@ -31,7 +31,7 @@ class Items {
 
         if ($item = Item::find($id)) 
         {
-            DB::transaction(function () use ($item, $data) {
+            DB::transaction(function () use ($item, $data, &$ret) {
 
                 $item->name = $data->name;
                 $item->description = $data->description;
