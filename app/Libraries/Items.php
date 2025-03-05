@@ -12,7 +12,7 @@ class Items {
     {
         $ret = FALSE;
         
-        DB::transaction(function() use ($data) {
+        DB::transaction(function() use ($data, &$ret) {
             
             $ret = Item::create([
                 'name' => $data->name,
@@ -29,7 +29,7 @@ class Items {
     {
         $ret = FALSE;
 
-        if ($item = Item::find($id)) 
+        if ($item = Item::find($id))
         {
             DB::transaction(function () use ($item, $data, &$ret) {
 
@@ -37,7 +37,7 @@ class Items {
                 $item->description = $data->description;
                 $item->quantity = $data->quantity;
                 $item->critical_quantity = $data->critical_quantity;
-
+                
                 $ret = $item->save();
             });
         }

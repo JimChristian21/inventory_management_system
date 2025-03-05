@@ -1,7 +1,7 @@
 <script setup>
 
     import { ref } from 'vue';
-    import { Link, router } from '@inertiajs/vue3';
+    import { Link } from '@inertiajs/vue3';
     
     import ItemCreate from './ItemCreate.vue';
     import ItemUpdate from './ItemUpdate.vue';
@@ -60,6 +60,11 @@
         isUpdate.value = value;
     }
 
+    const isCritical = (quantity, critical_quantity) => {
+        
+        return quantity <= critical_quantity;
+    }
+
 </script>
 
 <template>
@@ -105,7 +110,7 @@
                 </div>
             </template>
             <template #body>
-                <Row v-for="item in props.items.data">
+                <Row :class="{ 'bg-red-200' : isCritical(item.quantity, item.critical_quantity) }" v-for="item in props.items.data">
                     <Column>{{ item.name }}</Column>
                     <Column>{{ item.description }}</Column>
                     <Column>{{ item.quantity }}</Column>

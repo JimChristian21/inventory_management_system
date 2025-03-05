@@ -1,9 +1,10 @@
 <script setup>
 
 import { debounce } from 'lodash';
-import { reactive, ref, watch } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { onMounted, onUpdated, reactive, ref, watch } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
 import Paginator from './Paginator.vue';
+import { toast } from 'vue3-toastify';
 
 const props = defineProps({
     headers: {
@@ -20,11 +21,21 @@ const props = defineProps({
     }
 });
 
+const page = usePage();
 const search = ref('');
 const sort = reactive({
     column: null,
     order: null,
 });
+
+const callToaster = () => {
+
+    if (page.props.flash_message) {
+
+        toast(page.props.flash_message);
+        delete page.props.flash_message;
+    }
+}
 
 const sortBy = (column) => {
 
@@ -52,6 +63,16 @@ const sortBy = (column) => {
         });
     }
 }
+
+onMounted(() => {
+    
+    callToaster();
+})
+
+onUpdated(() => {
+    
+    callToaster();
+})
 
 watch(search, debounce(() => {
     

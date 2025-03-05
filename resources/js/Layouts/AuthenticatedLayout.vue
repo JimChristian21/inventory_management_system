@@ -42,7 +42,7 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink
                                     :href="route('user.index')"
                                     :active="route().current('user.index')"
-                                    v-if="$page.props.auth.user.role == 'ADMIN'"
+                                    v-if="$page.props.auth.user.role.code == 'ADMIN'"
                                 >
                                     Users Management
                                 </NavLink>
@@ -157,7 +157,7 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink
                             :href="route('user.index')"
                             :active="route().current('user.index')"
-                            v-if="$page.props.auth.user.role == 'ADMIN'"
+                            v-if="$page.props.auth.user.code == 'ADMIN'"
                         >
                             Users Management
                         </ResponsiveNavLink>

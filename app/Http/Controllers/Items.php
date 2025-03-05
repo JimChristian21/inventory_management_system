@@ -29,7 +29,13 @@ class Items extends Controller
         
         $created_item = $this->items_lib->create((object) $validated);
 
-        return redirect()->route('inventory.index');
+        $message = $created_item
+            ? 'Item created successfuly!'
+                : 'Failed creating user!';
+
+        return redirect()
+            ->route('inventory.index')
+            ->with('message', $message);
     }
 
     public function update(Request $request, $id)
@@ -48,13 +54,25 @@ class Items extends Controller
             Mail::to($request->user())->send( new LowItemNotification($id));
         }
 
-        return redirect()->route('inventory.index');
+        $message = $updated_item
+            ? 'Item updated successfuly!'
+                : 'Failed updating item!';
+
+        return redirect()
+            ->route('inventory.index')
+            ->with('message', $message);
     }
 
     public function destroy($id)
     {
         $deleted = $this->items_lib->delete($id);
 
-        return redirect()->route('inventory.index');
+        $message = $deleted
+            ? 'Item deleted successfuly!'
+                : 'Failed deleting item!';
+
+        return redirect()
+            ->route('inventory.index')
+            ->with('message', $message);
     }
 }
