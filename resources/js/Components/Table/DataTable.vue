@@ -30,10 +30,17 @@ const sort = reactive({
 
 const callToaster = () => {
 
-    if (page.props.flash_message) {
+    if (page.props?.flash) {
 
-        toast(page.props.flash_message);
-        delete page.props.flash_message;
+        let type = page.props.flash.status == 'S'
+            ? 'success'
+                : 'error';
+
+        toast(page.props.flash.message, {
+            type: type
+        });
+       
+        delete page.props.flash;
     }
 }
 

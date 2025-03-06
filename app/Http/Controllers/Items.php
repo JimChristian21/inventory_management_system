@@ -58,9 +58,14 @@ class Items extends Controller
             ? 'Item updated successfuly!'
                 : 'Failed updating item!';
 
+        $o = (object) [
+            'status' => $updated_item ? 'S' : 'E',
+            'message' => $message
+        ];
+
         return redirect()
             ->route('inventory.index')
-            ->with('message', $message);
+            ->with('message', $o);
     }
 
     public function destroy($id)
