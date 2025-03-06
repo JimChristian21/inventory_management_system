@@ -16,7 +16,7 @@ class Items_export {
         'Name' => 'name',
         'Description' => 'description',
         'Quantity' => 'quantity',
-        'Critical Quantity' => $critical_quantity
+        'Critical Quantity' => 'critical_quantity'
     ];
 
     public function __construct()
