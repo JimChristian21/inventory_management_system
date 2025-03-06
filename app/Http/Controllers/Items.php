@@ -9,6 +9,7 @@ use App\Mail\LowItemNotification;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class Items extends Controller
@@ -78,9 +79,11 @@ class Items extends Controller
     public function export()
     {
         $export_lib = new Items_export();
-        $file = $export_lib->run();
+        $filePath = $export_lib->run();
 
-        return response()->download($file, 'test.xlsx');
+        return redirect()
+            ->route('inventory.index')
+            ->with('download', $filePath);
     }
 
     public function destroy($id)

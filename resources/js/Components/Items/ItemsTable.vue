@@ -64,7 +64,6 @@
         
         return quantity <= critical_quantity;
     }
-
 </script>
 
 <template>
@@ -102,16 +101,14 @@
             <template #headerActions>
                 <div>
                     <button 
-                        class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer" 
+                        class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer hover:bg-slate-700 hover:text-white" 
                         @click="setIsCreate(true)"
                     >
                         New
                     </button>
                     <Link 
-                        :link="route('item.export')" 
-                        method="get"
-                        as="button"
-                        class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer"
+                        :href="route('item.export')" 
+                        class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer ml-2 hover:bg-slate-700 hover:text-white"
                     >
                         Export
                     </Link>

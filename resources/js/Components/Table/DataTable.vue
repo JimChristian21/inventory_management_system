@@ -73,13 +73,28 @@ const sortBy = (column) => {
 
 onMounted(() => {
     
-    callToaster();
+    onRender();
 })
 
 onUpdated(() => {
     
-    callToaster();
+    onRender();
 })
+
+const onRender = () => {
+
+    callToaster();
+    downloadFile();
+}
+
+const downloadFile = () => {
+
+    if (page.props?.download_file) {
+
+        window.open(page.props.download_file, '_self');
+        delete page.props.download_file;
+    }
+}
 
 watch(search, debounce(() => {
     

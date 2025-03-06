@@ -3,6 +3,7 @@
 namespace App\Libraries\Exports;
 
 use App\Models\Item;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -79,14 +80,16 @@ class Items_export {
     protected function save()
     {
         $ret = NULL;
-        $file = 'test.xlsx';
+        $timestamp = rand(1,1000000);
+        $file_path = storage_path("exports/items_{$timestamp}.xlsx");
         $writer = IOFactory::createWriter($this->spreadsheet, $this->type);
-        $writer->save($file);
+        $writer->save($file_path);
 
-        if (file_exists($file))
+        if (Storage::get($file_path))
         {
+            $file = Storage::url("exports/items_{$timestamp}.xlsx");
             $ret = $file;
-        }
+        };
         
         return $ret;
     }
