@@ -33,11 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/items', [Items::class, 'store'])->name('item.store');
     Route::patch('/items/{id}', [Items::class, 'update'])->name('item.update');
     Route::delete('/items/{id}', [Items::class, 'destroy'])->name('item.delete');
-
-    Route::get('/users', [Users::class, 'index'])->name('user.index');
-        Route::post('/users', [Users::class, 'store'])->name('user.store');
-        Route::patch('/users/{id}', [Users::class, 'update'])->name('user.update');
-        Route::delete('/users/{id}', [Users::class, 'destroy'])->name('user.delete');
+    Route::get('/items/export', [Items::class, 'export'])->name('item.export');
 
     Route::middleware('isAdmin')->group(function() {
 

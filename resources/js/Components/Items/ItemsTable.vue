@@ -107,6 +107,14 @@
                     >
                         New
                     </button>
+                    <Link 
+                        :link="route('item.export')" 
+                        method="get"
+                        as="button"
+                        class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer"
+                    >
+                        Export
+                    </Link>
                 </div>
             </template>
             <template #body>

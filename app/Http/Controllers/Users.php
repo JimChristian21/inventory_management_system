@@ -39,10 +39,15 @@ class Users extends Controller
         $message = $created_user
             ? 'User created successfuly!'
                 : 'Failed creating user!';
+            
+        $o = (object) [
+            'status' => $created_user ? 'S' : 'E',
+            'message' => $message
+        ];
 
         return redirect()
             ->route('user.index')
-            ->with('message', $message);
+            ->with('message', $o);
     }
 
     public function update(Request $request, int $id)
@@ -58,9 +63,14 @@ class Users extends Controller
             ? 'User updated successfuly!'
                 : 'Failed updating user!';
 
+        $o = (object) [
+            'status' => $updated_user ? 'S' : 'E',
+            'message' => $message
+        ];
+
         return redirect()
             ->route('user.index')
-            ->with('message', $message);
+            ->with('message', $o);
     }
 
     public function destroy(Request $request, int $id)
@@ -71,8 +81,13 @@ class Users extends Controller
             ? 'User deleted successfuly!'
                 : 'Failed deleting user!';
 
+        $o = (object) [
+            'status' => $is_deleted ? 'S' : 'E',
+            'message' => $message
+        ];
+
         return redirect()
             ->route('user.index')
-            ->with('message', $message);
+            ->with('message', $o);
     }
 }

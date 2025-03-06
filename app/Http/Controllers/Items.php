@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\Exports\Item_export;
+use App\Libraries\Exports\Items_export;
 use App\Libraries\Items as ItemsLib;
 use App\Mail\LowItemNotification;
 use App\Models\Item;
@@ -33,9 +35,14 @@ class Items extends Controller
             ? 'Item created successfuly!'
                 : 'Failed creating user!';
 
+        $o = (object) [
+            'status' => $created_item ? 'S' : 'E',
+            'message' => $message
+        ];
+
         return redirect()
             ->route('inventory.index')
-            ->with('message', $message);
+            ->with('message', $o);
     }
 
     public function update(Request $request, $id)
@@ -68,6 +75,14 @@ class Items extends Controller
             ->with('message', $o);
     }
 
+    public function export()
+    {
+        $export_lib = new Items_export();
+        $file = $export_lib->run();
+
+        return response()->download($file, 'test.xlsx');
+    }
+
     public function destroy($id)
     {
         $deleted = $this->items_lib->delete($id);
@@ -75,9 +90,14 @@ class Items extends Controller
         $message = $deleted
             ? 'Item deleted successfuly!'
                 : 'Failed deleting item!';
+            
+        $o = (object) [
+            'status' => $deleted ? 'S' : 'E',
+            'message' => $message
+        ];
 
         return redirect()
             ->route('inventory.index')
-            ->with('message', $message);
+            ->with('message', $o);
     }
 }
