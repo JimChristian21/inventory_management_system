@@ -54,11 +54,15 @@ class Items_export {
         $items = $this->get_items();
         $row = 2;
 
-        foreach($items as $item)
+        if ($items) 
         {
-            $this->write_row($row, $item);
-            $row++;
+            foreach($items as $item)
+            {
+                $this->write_row($row, $item);
+                $row++;
+            }
         }
+        
     }
 
     protected function write_row(string $row, object $data)
@@ -74,10 +78,16 @@ class Items_export {
 
     protected function save()
     {
+        $ret = NULL;
         $file = 'test.xlsx';
         $writer = IOFactory::createWriter($this->spreadsheet, $this->type);
         $writer->save($file);
+
+        if (file_exists($file))
+        {
+            $ret = $file;
+        }
         
-        return $file;
+        return $ret;
     }
 }
