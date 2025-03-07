@@ -9,6 +9,7 @@
     import Column from '@/Components/Table/Column.vue';
     import Row from '@/Components/Table/Row.vue';
     import Modal from '../Modal.vue';
+    import Import from '../Import.vue';
 
     const props = defineProps({
         'items': {
@@ -42,6 +43,7 @@
 
     const isCreate = ref(false);
     const isUpdate = ref(false);
+    const isImport = ref(false);
     const itemInfo = ref(null);
 
     const updateUser = (data) => {
@@ -58,6 +60,11 @@
     const setIsUpdate = (value) => {
 
         isUpdate.value = value;
+    }
+
+    const setIsImport = (value) => {
+
+        isImport.value = value;
     }
 
     const isCritical = (quantity, critical_quantity) => {
@@ -86,6 +93,15 @@
                 />
             </div>
         </Modal>
+
+        <Modal :show="isImport">
+            <div class="w-full h-full bg-white/75 pt-[2%] p-5">
+                <Import
+                    :route="route('item.import')"
+                    @cancelImport="setIsImport(false)"
+                />
+            </div>
+        </Modal>
         
         <DataTable
             :route="route('inventory.index')"
@@ -108,10 +124,16 @@
                     </button>
                     <Link 
                         :href="route('item.export')" 
-                        class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer ml-2 hover:bg-slate-700 hover:text-white"
+                        class="bg-slate-400 p-[.6rem] rounded-lg hover:cursor-pointer ml-2 hover:bg-slate-700 hover:text-white"
                     >
                         Export
                     </Link>
+                    <button 
+                        class="bg-slate-400 p-2 rounded-lg hover:cursor-pointer ml-2 hover:bg-slate-700 hover:text-white" 
+                        @click="setIsImport(true)"
+                    >
+                        Import
+                    </button>
                 </div>
             </template>
             <template #body>

@@ -76,6 +76,20 @@ class Items extends Controller
             ->with('message', $o);
     }
 
+    public function import(Request $request)
+    {
+        $validated = $request->validate([
+            'file' => 'required|mimes:xlsx'
+        ]);
+
+        return redirect()
+            ->route('inventory.index')
+            ->with('message', [
+                'status' => 'S',
+                'message' => 'Imported Successfully'
+            ]);
+    }
+
     public function export()
     {
         $export_lib = new Items_export();

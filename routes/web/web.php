@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/items/{id}', [Items::class, 'update'])->name('item.update');
     Route::delete('/items/{id}', [Items::class, 'destroy'])->name('item.delete');
     Route::get('/items/export', [Items::class, 'export'])->name('item.export');
+    Route::post('/items/import', [Items::class, 'import'])->name('item.import');
 
     Route::middleware('isAdmin')->group(function() {
 
