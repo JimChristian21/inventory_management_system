@@ -80,17 +80,16 @@ class Items_export {
     protected function save()
     {
         $ret = NULL;
-        $timestamp = rand(1,1000000);
-        $file_path = storage_path("exports/items_{$timestamp}.xlsx");
-        $writer = IOFactory::createWriter($this->spreadsheet, $this->type);
-        $writer->save($file_path);
+        $timestamp = now()->timestamp;
+        $filename = "exports/items_{$timestamp}.xlsx";
+        $tmp_file = tmpfile();
 
-        if (Storage::get($file_path))
-        {
-            $file = Storage::url("exports/items_{$timestamp}.xlsx");
-            $ret = $file;
-        };
-        
+        $writer = IOFactory::createWriter($this->spreadsheet, $this->type);
+        $writer->save($tmp_file);
+
+        Storage::put($filename, $tmp_file)
+            && $ret = Storage::url($filename);
+            
         return $ret;
     }
 }
