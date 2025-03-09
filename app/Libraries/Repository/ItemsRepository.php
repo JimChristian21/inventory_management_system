@@ -86,4 +86,11 @@ class ItemsRepository {
     {
         return Item::all();
     }
+
+    public function get_by($column, $operator, $value)
+    {
+        return Item::where($column, $operator, $value)
+            ->get();
+
+    }
 }

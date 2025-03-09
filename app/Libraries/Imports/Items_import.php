@@ -58,18 +58,35 @@ class Items_import {
             $cellIterator = $row->getCellIterator();
 
             $column_values = [];
+            $is_save = TRUE;
 
             foreach($cellIterator as $key => $cell)
             {
-                $column_values[$this->columns[$key]] = $cell->getValue();
+                $fn =  "validate_{$this->columns[$key]}";
+                $value = $cell->getValue();
+
+                if (method_exists($this, $fn)
+                    && !$this->{$fn}($value)
+                ) {
+                    $is_save = FALSE;
+                    break;
+                }
+
+                $column_values[$this->columns[$key]] = $value;
             }
 
-            $this->save((object) $column_values);
+            $is_save
+                && $this->save((object) $column_values);
         }
     }
 
     protected function save($data)
     {
         $this->items_repository->create($data);
+    }
+
+    protected function validate_name(string $name)
+    {
+        return !$this->items_repository->get_by('name', '=', $name);
     }
 }
