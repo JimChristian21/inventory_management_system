@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Libraries\Exports\Item_export;
+
 use App\Libraries\Exports\Items_export;
-use App\Libraries\Items as ItemsLib;
+use App\Libraries\Imports\Items_import;
+use App\Libraries\Repository\ItemsRepository;
 use App\Mail\LowItemNotification;
-use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
 
 class Items extends Controller
 {
-    protected $items_lib;
+    protected $items_repository;
 
     public function __construct()
     {
-        $this->items_lib = new ItemsLib();
+        $this->items_repository = new ItemsRepository();
     }
 
     public function store(Request $request)
@@ -30,7 +28,7 @@ class Items extends Controller
             'critical_quantity' => 'required|integer|min:0'
         ]);
         
-        $created_item = $this->items_lib->create((object) $validated);
+        $created_item = $this->items_repository->create((object) $validated);
 
         $message = $created_item
             ? 'Item created successfuly!'
@@ -55,7 +53,7 @@ class Items extends Controller
             'critical_quantity' => 'required|integer|min:0'
         ]);
         
-        $updated_item = $this->items_lib->update($id, $validated);
+        $updated_item = $this->items_repository->update($id, $validated);
 
         if ($validated->quantity <= $validated->critical_quantity)
         {
@@ -78,9 +76,13 @@ class Items extends Controller
 
     public function import(Request $request)
     {
-        $validated = $request->validate([
+        $validated = (object) $request->validate([
             'file' => 'required|mimes:xlsx'
         ]);
+
+        $import_lib = new Items_import();
+
+        $status = $import_lib->run($validated->file);
 
         return redirect()
             ->route('inventory.index')
@@ -102,7 +104,7 @@ class Items extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->items_lib->delete($id);
+        $deleted = $this->items_repository->delete($id);
 
         $message = $deleted
             ? 'Item deleted successfuly!'

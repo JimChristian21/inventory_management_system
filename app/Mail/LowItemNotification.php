@@ -3,7 +3,7 @@
 namespace App\Mail;
 
 use App\Libraries\Email;
-use App\Libraries\Users;
+use App\Libraries\Repository\UsersRepository;
 use App\Models\Item;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,7 +17,7 @@ class LowItemNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $users_lib;
+    protected $users_repository;
     protected $email_lib;
     public $item;
 
@@ -27,7 +27,7 @@ class LowItemNotification extends Mailable
     public function __construct(int $item_id)
     {
         $this->item = Item::find($item_id);
-        $this->users_lib = new Users();
+        $this->users_repository = new UsersRepository();
         $this->email_lib = new Email();
     }
 
@@ -36,7 +36,7 @@ class LowItemNotification extends Mailable
      */
     public function envelope(): Envelope
     {
-        $admin_users = $this->users_lib->get_admin_users();
+        $admin_users = $this->users_repository->get_admin_users();
         $replyTo = $this->email_lib->get_recipients($admin_users);
 
         return new Envelope(

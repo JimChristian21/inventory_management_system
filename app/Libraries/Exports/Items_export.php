@@ -2,7 +2,7 @@
 
 namespace App\Libraries\Exports;
 
-use App\Models\Item;
+use App\Libraries\Repository\ItemsRepository;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -11,6 +11,7 @@ class Items_export {
 
     protected $spreadsheet;
     protected $active_sheet;
+    protected $items_repository;
     protected $type = 'Xlsx';
 
     protected $headers = [
@@ -23,6 +24,7 @@ class Items_export {
     public function __construct()
     {
         $this->spreadsheet = new Spreadsheet();
+        $this->items_repository = new ItemsRepository();
         $this->active_sheet = $this->spreadsheet->getActiveSheet();
     }
 
@@ -32,11 +34,6 @@ class Items_export {
         $this->write();
         $file = $this->save();
         return $file;
-    }
-
-    protected function get_items()
-    {
-        return Item::all();
     }
 
     protected function write_headers()
@@ -52,7 +49,7 @@ class Items_export {
 
     protected function write()
     {
-        $items = $this->get_items();
+        $items = $this->items_repository->all();
         $row = 2;
 
         if ($items) 

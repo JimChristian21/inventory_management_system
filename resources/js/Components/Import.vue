@@ -1,5 +1,7 @@
 <script setup>
 
+    import InputError from './InputError.vue';
+    import InputLabel from './InputLabel.vue';
     import PrimaryButton from './PrimaryButton.vue';
     import SecondaryButton from './SecondaryButton.vue';
     import { useForm } from '@inertiajs/vue3';
@@ -24,11 +26,15 @@
     });
 
     const submit = () => {
-
         form.post(props.route), {
             onSuccess: () => {
+                console.log('onSuccess')
                 form.reset();
                 emit('cancelImport');
+            },
+            onFinish: () => {
+                console.log('onFinish')
+                emit('cancelImport')
             }
         };
     };

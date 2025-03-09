@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Libraries;
+namespace App\Libraries\Repository;
 
 use App\Models\User;
 use App\Models\User_role;
@@ -8,7 +8,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class Users {
+class UsersRepository {
 
     public function create(object $data): mixed
     {

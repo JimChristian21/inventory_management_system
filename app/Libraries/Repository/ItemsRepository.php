@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Libraries;
+namespace App\Libraries\Repository;
 
 use App\Models\Item;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
-class Items {
+class ItemsRepository {
 
     public function create($data): mixed 
     {
@@ -80,5 +80,10 @@ class Items {
 
         return $item_model->paginate($per_page)
             ->withQueryString();
+    }
+
+    public function all()
+    {
+        return Item::all();
     }
 }
