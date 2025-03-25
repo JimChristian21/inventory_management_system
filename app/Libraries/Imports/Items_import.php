@@ -66,7 +66,7 @@ class Items_import {
                 $value = $cell->getValue();
 
                 if (method_exists($this, $fn)
-                    && !$this->{$fn}($value)
+                    && $this->{$fn}($value)
                 ) {
                     $is_save = FALSE;
                     break;
