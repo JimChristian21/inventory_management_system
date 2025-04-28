@@ -1,22 +1,24 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
+
+const props = defineProps({
+    loginImg: {
+        type: String
+    }
+});
 </script>
 
 <template>
     <div
-        class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0"
+        class="flex w-full h-100vh min-h-screen flex-row items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0"
     >
-        <div>
-            <Link href="/">
-                <ApplicationLogo class="h-20 w-20 fill-current text-gray-500" />
-            </Link>
+        <div class="w-1/4 p-10">
+            <slot />
         </div>
 
-        <div
-            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
-        >
-            <slot />
+        <div class="w-3/4 bg-generic_img">
+            <img class="w-[50%] border-none" :src="loginImg"/>
         </div>
     </div>
 </template>
