@@ -14,6 +14,9 @@ defineProps({
     status: {
         type: String,
     },
+    loginImg: {
+        type: String,
+    }
 });
 
 const form = useForm({
@@ -30,11 +33,16 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout :loginImg="loginImg">
         <Head title="Log in" />
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
+        </div>
+
+        <div>
+            <h1 class="font-bold text-center">Inventory Management System</h1>
+            <h2>Login</h2>
         </div>
 
         <form @submit.prevent="submit">
